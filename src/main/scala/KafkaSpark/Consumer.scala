@@ -1,0 +1,5 @@
+package KafkaSpark
+
+object Consumer {
+
+}
