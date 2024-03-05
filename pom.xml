@@ -80,7 +80,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>kafkaspark.SendDataToKafka</mainClass>
+              <mainClass>kafkaSpark.SendDataToKafka</mainClass>
             </manifest>
           </archive>
         </configuration>
