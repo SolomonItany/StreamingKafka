@@ -5,11 +5,7 @@ import scala.io.Source
 import org.apache.spark.sql.streaming.Trigger
 object Producer {
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession.builder()
-      .appName("Producer")
-      .master("local[*]")
-      .getOrCreate()
-
+    val spark = SparkSession.builder().appName("Producer").master("local[*]").getOrCreate()
     val url = "http://18.133.73.36:5000/Insurance_Claims"
     // Fetch JSON data from the URL
     val result = Source.fromURL(url).mkString
