@@ -18,7 +18,7 @@ object Producer {
         val response = get(apiUrl, headers = headers)
         val total = response.text()
         val dfFromText = spark.read.json(Seq(total).toDS)
-        dfFromText.show(5)
+        dfFromText.show(10)
     }
 
 
