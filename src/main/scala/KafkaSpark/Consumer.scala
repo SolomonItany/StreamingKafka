@@ -55,7 +55,8 @@ object Consumer {
 
     // Read the JSON messages from Kafka as a DataFrame and write to hdfs
     val df = spark.readStream.format("kafka").options(kafkaParams).load().select(from_json(col("value").cast("string"), schema).as("data")).selectExpr("data.*")
-    // Write the DataFrame as CSV files to HDFS
+
+    // Write  DataFrame as CSV files to HDFS
 
 
 
