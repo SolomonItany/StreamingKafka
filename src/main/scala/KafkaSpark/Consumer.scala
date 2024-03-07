@@ -9,7 +9,7 @@ object Consumer {
 
     //Define the Kafka parameters
     val kafkaParams = Map[String, String](
-      "bootstrap.servers" -> "ip-172-31-3-80.eu-west-2.compute.internal:9092",
+      "kafka.bootstrap.servers" -> "ip-172-31-3-80.eu-west-2.compute.internal:9092",
       "key.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
       "value.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
       "group.id" -> "group1",
