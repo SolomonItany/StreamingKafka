@@ -6,7 +6,6 @@ import scala.io.Source
 object Producer {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder().appName("Producer").master("local[*]").getOrCreate()
-    while (true) {
       val url = "http://18.133.73.36:5000/Insurance_Claims"
       // Fetch JSON data from the URL
       val result = Source.fromURL(url).mkString
@@ -15,7 +14,7 @@ object Producer {
       val jsonData = spark.read.json(spark.createDataset(Seq(result))(Encoders.STRING))
 
       val kafkaServer: String = "ip-172-31-3-80.eu-west-2.compute.internal:9092"
-      val topicName: String = "InsuranceClaims2"
+      val topicName: String = "InsuranceClaims"
 
       jsonData.selectExpr("to_json(struct(*)) AS value")
         .selectExpr("CAST(value AS STRING)")
@@ -26,7 +25,7 @@ object Producer {
 
       println("message is loaded to kafka topic")
       Thread.sleep(10000) // wait for 10 seconds before making the next call
-    }
+
   }
 }
 

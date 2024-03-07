@@ -7,14 +7,16 @@ object Consumer {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder().appName("Consumer").master("local[*]").getOrCreate()
 
-    // Define the Kafka parameters
-    val kafkaParams = Map[String, Object](
+    //Define the Kafka parameters
+    val kafkaParams = Map[String, String](
       "bootstrap.servers" -> "ip-172-31-3-80.eu-west-2.compute.internal:9092",
       "key.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
       "value.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
       "group.id" -> "group1",
       "auto.offset.reset" -> "earliest",
-      "enable.auto.commit" -> (false: java.lang.Boolean)
+      "enable.auto.commit" -> "false",
+      "subscribe" -> "InsuranceClaims",
+      "startingOffsets" -> "earliest"
     )
 
     // Define the Kafka topic to subscribe to
@@ -52,9 +54,11 @@ object Consumer {
     ))
 
     // Read the JSON messages from Kafka as a DataFrame and write to hdfs
-    val df = spark.readStream.format("kafka").option("kafka.bootstrap.servers", "ip-172-31-3-80.eu-west-2.compute.internal:9092").option("subscribe", topic).option("startingOffsets", "earliest").load().select(from_json(col("value").cast("string"), schema).as("data")).selectExpr("data.*")
-
+    val df = spark.readStream.format("kafka").options(kafkaParams).load().select(from_json(col("value").cast("string"), schema).as("data")).selectExpr("data.*")
     // Write the DataFrame as CSV files to HDFS
+
+
+
     df.writeStream.format("csv").option("checkpointLocation", "/tmp/USUK30/Solomon/Kafka/checkpoint").option("path", "/tmp/USUK30/Solomon/Kafka/Insurance_claims").start().awaitTermination()
 
   }
