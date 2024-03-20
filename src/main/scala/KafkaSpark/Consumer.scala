@@ -20,7 +20,7 @@ object Consumer {
     )
 
     // Define the Kafka topic to subscribe to
-    val topic = "InsuranceClaims"
+    val topic = "INSURANCE_CLAIM_9"
 
     // Define the schema for the JSON messages
     val schema = StructType(Seq(

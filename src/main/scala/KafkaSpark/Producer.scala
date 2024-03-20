@@ -3,8 +3,7 @@ package KafkaSpark
 import org.apache.spark.sql.{SparkSession, Encoders}
 import scala.io.Source
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
-import org.apache.spark.sql.{DataFrame, SparkSession, Row}
-import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
+
 object Producer {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder().appName("Producer").master("local[*]").getOrCreate()
@@ -25,11 +24,9 @@ object Producer {
     kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
-
-    //val producer = new KafkaProducer[String, String](kafkaProducerProps)
     val producer = new KafkaProducer[String, String](kafkaProps)
 
-    val topic = "INSURANCE_CLAIM_8"
+    val topic = "INSURANCE_CLAIM_9"
 
     // Assuming jsonStringDF is small enough to collect (be careful with large DataFrames)
     jsonStringDF.collect().foreach { row =>
