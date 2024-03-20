@@ -15,28 +15,29 @@ object Producer {
     // Create a DataFrame from the JSON data
     val jsonData = spark.read.json(spark.createDataset(Seq(result))(Encoders.STRING))
 
-    jsonData.show(5)
 
-
+    val kafkaServer: String = "ip-172-31-3-80.eu-west-2.compute.internal:9092"
     val topic = "INSURANCE_CLAIM_7"
 
-    val query = jsonData
+    // Define a Trigger to control data sending frequency
+    val trigger = Trigger.ProcessingTime("3 seconds") // Send data every 10 seconds (adjust as needed)
+
+    // Create a streaming query with the trigger
+    val query: StreamingQuery = jsonData
+      .selectExpr("to_json(struct(*)) AS value") // Convert data to JSON string
       .writeStream
-      .outputMode("append") // Specify the output mode
-      .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-        // Process each micro-batch
-        batchDF.selectExpr("CAST(value AS STRING)") // Convert DataFrame to JSON strings
-          .toJSON
-          .write
-          .format("kafka") // Specify the sink format as Kafka
-          .option("kafka.bootstrap.servers", "ip-172-31-3-80.eu-west-2.compute.internal:9092") // Kafka brokers
-          .option("topic", topic) // Kafka topic
-          .save()
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "kafkaServer")
+      .option("topic", "topic")
+      .trigger(trigger)
+      .foreachBatch { (batch: DataFrame, batchId: Long) =>
+        // Process and send data in the batch (similar to the previous example)
       }
-      .trigger(Trigger.ProcessingTime("3 seconds")) // Trigger every 3 seconds
       .start()
 
+    // Wait for the streaming query to terminate (optional)
     query.awaitTermination()
+
 
     /*val kafkaServer: String = "ip-172-31-3-80.eu-west-2.compute.internal:9092"
     val topicName: String = "InsuranceClaims"
