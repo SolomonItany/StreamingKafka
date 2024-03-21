@@ -7,6 +7,10 @@ object Consumer {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder().appName("Consumer").master("local[*]").getOrCreate()
 
+
+    // Define the Kafka topic to subscribe to
+    val topic = "INSURANCE_CLAIM_10"
+
     //Define the Kafka parameters
     val kafkaParams = Map[String, String](
       "kafka.bootstrap.servers" -> "ip-172-31-3-80.eu-west-2.compute.internal:9092",
@@ -15,12 +19,9 @@ object Consumer {
       "group.id" -> "group1",
       "auto.offset.reset" -> "earliest",
       "enable.auto.commit" -> "false",
-      "subscribe" -> "InsuranceClaims",
+      "subscribe" -> "topic",
       "startingOffsets" -> "earliest"
     )
-
-    // Define the Kafka topic to subscribe to
-    val topic = "INSURANCE_CLAIM_9"
 
     // Define the schema for the JSON messages
     val schema = StructType(Seq(
