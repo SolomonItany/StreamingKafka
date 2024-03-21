@@ -9,7 +9,7 @@ object Consumer {
 
 
     // Define the Kafka topic to subscribe to
-    val topic = "INSURANCE_CLAIM_12"
+    val topic = "INSURANCE_CLAIM_13"
 
     //Define the Kafka parameters
     val kafkaParams = Map[String, String](
