@@ -19,7 +19,6 @@ object Consumer {
       "group.id" -> "group1",
       "auto.offset.reset" -> "earliest",
       "enable.auto.commit" -> "false",
-      "subscribe" -> "topic",
       "startingOffsets" -> "earliest"
     )
 
@@ -55,7 +54,8 @@ object Consumer {
     ))
 
     // Read the JSON messages from Kafka as a DataFrame and write to hdfs
-    val df = spark.readStream.format("kafka").options(kafkaParams).load().select(from_json(col("value").cast("string"), schema).as("data")).selectExpr("data.*")
+    val df = spark.readStream.format("kafka").options(kafkaParams).option("subscribe", topic)
+    .load().select(from_json(col("value").cast("string"), schema).as("data")).selectExpr("data.*")
 
     // Write  DataFrame as CSV files to HDFS
 
