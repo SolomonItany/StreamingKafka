@@ -26,7 +26,7 @@ object Producer {
 
     val producer = new KafkaProducer[String, String](kafkaProps)
 
-    val topic = "INSURANCE_CLAIM_11"
+    val topic = "INSURANCE_CLAIM_12"
 
     // Assuming jsonStringDF is small enough to collect (be careful with large DataFrames)
     jsonStringDF.collect().foreach { row =>

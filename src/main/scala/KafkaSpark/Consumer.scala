@@ -9,7 +9,7 @@ object Consumer {
 
 
     // Define the Kafka topic to subscribe to
-    val topic = "INSURANCE_CLAIM_11"
+    val topic = "INSURANCE_CLAIM_12"
 
     //Define the Kafka parameters
     val kafkaParams = Map[String, String](
@@ -19,6 +19,7 @@ object Consumer {
       "group.id" -> "group1",
       "auto.offset.reset" -> "earliest",
       "enable.auto.commit" -> "false",
+      "failOnDataLoss" -> "false",
       "startingOffsets" -> "earliest"
     )
 
